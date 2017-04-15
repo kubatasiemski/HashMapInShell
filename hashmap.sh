@@ -34,25 +34,56 @@ Hashmap.ascii() {
 }
 
 Hashmap.hash() {
-    local separated=$(echo $1 | sed 's/./& /g')
+    local array_name=$1
+    mod=$(eval echo \${$array_name[1]})
+    local separated=$(echo $2 | sed 's/./& /g')
     local arr=($separated)
     len=${#arr[@]}
     local hash=0
     local i=0
-    local prim=$2
+    local prim=$3
     while [ $i -lt $len ] ; do
         local var=$(Hashmap.ascii ${arr[$i]})
         hash=$((hash+var*prim))
         prim=$((prim*7))
         ((i++))
     done
+    hash=$((hash%mod))
     echo $hash
 }
 
+Hashmap.next() {
+    local array_name=$1
+    mod=$(eval echo \${$array_name[1]})
+    echo $((($2+$3)%mod))
+}
+
 Hashmap.firstHash(){
-    Hashmap.hash $1 7
+    Hashmap.hash $1 $2 7
 }
 
 Hashmap.secondHash(){
-    Hashmap.hash $1 13
+    hash=$(Hashmap.hash $1 $2 13)
+    if [ $hash -eq 0 ] ; then
+        echo 1
+    else
+        echo $hash
+    fi
+}
+
+Hashmap.put(){
+    #resize array
+    local array_name=$1
+    local hash1=$(Hashmap.firstHash $1 $2)
+    local hash2=$(Hashmap.secondHash $1 $2)
+    local i=$((hash1+5))
+    local f=$(eval echo \${$array_name[i]})
+    while [[ $f != "" && $f != $2 ]] ; do
+        i=$((i-5))
+        i=$(Hashmap.next $1 $i hash2)
+        i=$((i+5))
+        f=$(eval echo \${$array_name[i]})
+    done
+    echo $i
+    eval ${1}[i]=$2
 }
