@@ -20,8 +20,7 @@ Hashmap.getMaxSize(){
 }
 
 Hashmap.isEmpty() {
-    local array_name=$1
-    local count=$(eval echo \${$array_name[2]})
+    local count=$(Hashmap.size $1)
     if [ $count -eq 0 ] ; then
         echo 1
     else
@@ -132,5 +131,21 @@ Hashmap.get(){
 
 Hashmap.size(){
     local array_name=$1
-    eval echo \${$array_name[2]}
+    local size=$(eval echo \${$array_name[2]})
+    local ninjaSize=$(eval echo \${$array_name[3]})
+    echo $((size-ninjaSize))
+}
+
+Hashmap.remove(){
+    ifContainsKey=$(Hashmap.containsKey $1 $2)
+    if [ $ifContainsKey -eq 1 ] ; then
+        local array_name=$1
+        local ninjaSize=$(eval echo \${$array_name[3]})
+        ((ninjaSize++))
+        eval ${1}[3]=$ninjaSize
+        local i=$(Hashmap.getI $1 $2)
+        local iv=$(Hashmap.getIv $1 $i)
+        eval ${1}[i]="empty"
+        eval ${1}[iv]=""
+    fi
 }
