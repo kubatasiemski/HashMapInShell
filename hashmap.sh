@@ -13,3 +13,8 @@ Hashmap.hashmap() {
     eval ${1}[2]=0
     eval ${1}[3]=0
 }
+
+Hashmap.getMaxSize(){
+    local array_name=$1
+    eval echo \${$array_name[1]}
+}
