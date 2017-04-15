@@ -189,3 +189,19 @@ Hashmap.keys() {
         ((i++))
     done
 }
+
+Hashmap.values() {
+    local array_name=$1
+    local array_out=$2
+    local n=$(Hashmap.getMaxSize $1)
+    local i=0
+    local outi=0
+    while [ $i -lt $n ] ; do
+        local name=$(eval echo \${$array_name[$((i+5+n))]})
+        if [[ $name != "empty" && $name != "" ]] ; then
+            eval ${2}[outi]=$name
+            ((outi++))
+        fi
+        ((i++))
+    done
+}
