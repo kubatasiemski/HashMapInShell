@@ -1,5 +1,5 @@
 Hashmap.primeNumbers() {
-    primes=(227 457 919 1847 3697
+    local primes=(227 457 919 1847 3697
     7411 14827 29663 59333 118669
     237343 474707 949423 1898861 3797723
     7595453 15190919 30381851)
@@ -38,7 +38,7 @@ Hashmap.hash() {
     mod=$(eval echo \${$array_name[1]})
     local separated=$(echo $2 | sed 's/./& /g')
     local arr=($separated)
-    len=${#arr[@]}
+    local len=${#arr[@]}
     local hash=0
     local i=0
     local prim=$3
@@ -54,7 +54,7 @@ Hashmap.hash() {
 
 Hashmap.next() {
     local array_name=$1
-    mod=$(eval echo \${$array_name[1]})
+    local mod=$(eval echo \${$array_name[1]})
     echo $((($2+$3)%mod))
 }
 
@@ -63,7 +63,7 @@ Hashmap.firstHash(){
 }
 
 Hashmap.secondHash(){
-    hash=$(Hashmap.hash $1 $2 13)
+    local hash=$(Hashmap.hash $1 $2 13)
     if [ $hash -eq 0 ] ; then
         echo 1
     else
@@ -87,15 +87,26 @@ Hashmap.getI(){
 }
 
 Hashmap.getIv(){
-    i=$(Hashmap.getMaxSize $1)
+    local i=$(Hashmap.getMaxSize $1)
     i=$((i+$2))
     echo $i
 }
 
 Hashmap.put(){
-    #resize array
-    i=$(Hashmap.getI $1 $2 $3)
+    #TO DO resize array
+    local i=$(Hashmap.getI $1 $2 $3)
     eval ${1}[i]=$2
-    iv=$(Hashmap.getIv $1 $i)
+    local iv=$(Hashmap.getIv $1 $i)
     eval ${1}[iv]=$3
+}
+
+Hashmap.containsKey(){
+    local array_name=$1
+    local i=$(Hashmap.getI $1 $2 $3)
+    local f=$(eval echo \${$array_name[i]})
+    if [[ $f == $2 ]] ; then
+        echo 1
+    else
+        echo 0
+    fi
 }
