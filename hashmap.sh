@@ -18,3 +18,13 @@ Hashmap.getMaxSize(){
     local array_name=$1
     eval echo \${$array_name[1]}
 }
+
+Hashmap.isEmpty() {
+    local array_name=$1
+    local count=$(eval echo \${$array_name[2]})
+    if [ $count -eq 0 ] ; then
+        echo 1
+    else
+        echo 0
+    fi
+}
