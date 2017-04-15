@@ -77,9 +77,7 @@ Hashmap.getI(){
     local i=$((hash1+5))
     local f=$(eval echo \${$array_name[i]})
     while [[ $f != "" && $f != $2 ]] ; do
-        i=$((i-5))
-        i=$(Hashmap.next $1 $i hash2)
-        i=$((i+5))
+        i=$(Hashmap.next $1 $((i-5)) hash2)
         f=$(eval echo \${$array_name[i]})
     done
     echo $i
@@ -151,12 +149,26 @@ Hashmap.remove(){
 }
 
 Hashmap.clear() {
-    n=$(Hashmap.getMaxSize $1)
+    local n=$(Hashmap.getMaxSize $1)
     n=$((n*2+5))
-    i=0
+    local i=0
     while [ $i -lt $n ] ; do
         eval ${1}[i]=""
         ((i++))
     done
     Hashmap.hashmap $1
+}
+
+Hashmap.toString() {
+    local array_name=$1
+    local n=$(Hashmap.getMaxSize $1)
+    local i=0
+    while [ $i -lt $n ] ; do
+        local name=$(eval echo \${$array_name[$((i+5))]})
+        if [[ $name != "empty" && $name != "" ]] ; then
+            local value=$(eval echo \${$array_name[$((i+5+n))]})
+            printf "[$name:$value] "
+        fi
+        ((i++))
+    done
 }
