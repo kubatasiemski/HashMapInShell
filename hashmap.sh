@@ -94,6 +94,13 @@ Hashmap.getIv(){
 
 Hashmap.put(){
     #TO DO resize array
+    ifContainsKey=$(Hashmap.containsKey $1 $2)
+    if [ $ifContainsKey -eq 0 ] ; then
+        local array_name=$1
+        local size=$(eval echo \${$array_name[2]})
+        ((size++))
+        eval ${1}[2]=$size
+    fi
     local i=$(Hashmap.getI $1 $2)
     eval ${1}[i]=$2
     local iv=$(Hashmap.getIv $1 $i)
@@ -121,4 +128,9 @@ Hashmap.get(){
     else
         echo ""
     fi
+}
+
+Hashmap.size(){
+    local array_name=$1
+    eval echo \${$array_name[2]}
 }
