@@ -149,3 +149,14 @@ Hashmap.remove(){
         eval ${1}[iv]=""
     fi
 }
+
+Hashmap.clear() {
+    n=$(Hashmap.getMaxSize $1)
+    n=$((n*2+5))
+    i=0
+    while [ $i -lt $n ] ; do
+        eval ${1}[i]=""
+        ((i++))
+    done
+    Hashmap.hashmap $1
+}
