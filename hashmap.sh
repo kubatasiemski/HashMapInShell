@@ -71,8 +71,7 @@ Hashmap.secondHash(){
     fi
 }
 
-Hashmap.put(){
-    #resize array
+Hashmap.getI(){
     local array_name=$1
     local hash1=$(Hashmap.firstHash $1 $2)
     local hash2=$(Hashmap.secondHash $1 $2)
@@ -85,5 +84,18 @@ Hashmap.put(){
         f=$(eval echo \${$array_name[i]})
     done
     echo $i
+}
+
+Hashmap.getIv(){
+    i=$(Hashmap.getMaxSize $1)
+    i=$((i+$2))
+    echo $i
+}
+
+Hashmap.put(){
+    #resize array
+    i=$(Hashmap.getI $1 $2 $3)
     eval ${1}[i]=$2
+    iv=$(Hashmap.getIv $1 $i)
+    eval ${1}[iv]=$3
 }
