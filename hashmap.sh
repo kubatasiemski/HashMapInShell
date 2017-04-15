@@ -94,7 +94,7 @@ Hashmap.getIv(){
 
 Hashmap.put(){
     #TO DO resize array
-    local i=$(Hashmap.getI $1 $2 $3)
+    local i=$(Hashmap.getI $1 $2)
     eval ${1}[i]=$2
     local iv=$(Hashmap.getIv $1 $i)
     eval ${1}[iv]=$3
@@ -102,11 +102,23 @@ Hashmap.put(){
 
 Hashmap.containsKey(){
     local array_name=$1
-    local i=$(Hashmap.getI $1 $2 $3)
+    local i=$(Hashmap.getI $1 $2)
     local f=$(eval echo \${$array_name[i]})
     if [[ $f == $2 ]] ; then
         echo 1
     else
         echo 0
+    fi
+}
+
+Hashmap.get(){
+    ifContainsKey=$(Hashmap.containsKey $1 $2)
+    if [ $ifContainsKey -eq 1 ] ; then
+        local array_name=$1
+        local i=$(Hashmap.getI $1 $2)
+        local iv=$(Hashmap.getIv $1 $i)
+        eval echo \${$array_name[iv]}
+    else
+        echo ""
     fi
 }
