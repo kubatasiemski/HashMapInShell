@@ -28,3 +28,31 @@ Hashmap.isEmpty() {
         echo 0
     fi
 }
+
+Hashmap.ascii() {
+    LC_CTYPE=C printf '%d' "'$1"
+}
+
+Hashmap.hash() {
+    local separated=$(echo $1 | sed 's/./& /g')
+    local arr=($separated)
+    len=${#arr[@]}
+    local hash=0
+    local i=0
+    local prim=$2
+    while [ $i -lt $len ] ; do
+        local var=$(Hashmap.ascii ${arr[$i]})
+        hash=$((hash+var*prim))
+        prim=$((prim*7))
+        ((i++))
+    done
+    echo $hash
+}
+
+Hashmap.firstHash(){
+    Hashmap.hash $1 7
+}
+
+Hashmap.secondHash(){
+    Hashmap.hash $1 13
+}
