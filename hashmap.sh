@@ -90,7 +90,12 @@ Hashmap.getIv(){
 }
 
 Hashmap.put(){
-    #TO DO resize array
+    local maxSize=$(Hashmap.getMaxSize $1)
+    local size=$(Hashmap.size $1)
+    local res=$((${size}*1000/${maxSize}))
+    if [ $res -gt 700 ] ; then
+        Hashmap.resize $1
+    fi
     ifContainsKey=$(Hashmap.containsKey $1 $2)
     if [ $ifContainsKey -eq 0 ] ; then
         local array_name=$1
@@ -145,6 +150,11 @@ Hashmap.remove(){
         local iv=$(Hashmap.getIv $1 $i)
         eval ${1}[i]="empty"
         eval ${1}[iv]=""
+        local maxSize=$(Hashmap.getMaxSize $1)
+        local res=$((${ninjaSize}*1000/${maxSize}))
+        if [ $res -gt 500 ] ; then
+            Hashmap.removeNinja $1
+        fi
     fi
 }
 
@@ -256,8 +266,7 @@ Hashmap.equals() {
     fi
 }
 
-
-Hashmap.resize() {
+Hashmap.reload() {
     local array_name=$1
     local size=$(eval echo \${$array_name[0]})
     local keys
@@ -277,8 +286,7 @@ Hashmap.resize() {
         fi
         ((i++))
     done
-
-    ((size++))
+    size=$((size+$2))
     local neWsize=$(Hashmap.primeNumbers $size)
     Hashmap.clear $1
     eval ${1}[0]=$size
@@ -290,4 +298,13 @@ Hashmap.resize() {
         Hashmap.put $1 ${keys[$i]} ${values[$i]}
         ((i++))
     done
+}
+
+
+Hashmap.resize() {
+    Hashmap.reload $1 1
+}
+
+Hashmap.removeNinja() {
+    Hashmap.reload $1 0
 }
