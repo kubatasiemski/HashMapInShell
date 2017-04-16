@@ -205,3 +205,21 @@ Hashmap.values() {
         ((i++))
     done
 }
+
+Hashmap.add() {
+    ifContainsKey=$(Hashmap.containsKey $1 $2)
+    if [ $ifContainsKey -eq 1 ] ; then
+        local array_name=$1
+        local i=$(Hashmap.getI $1 $2)
+        local iv=$(Hashmap.getIv $1 $i)
+        local value=$(eval echo \${$array_name[iv]})
+        if [ "$value" -eq "$value" ] 2>/dev/null; then
+            value=$((value+$3))
+            eval ${1}[iv]=$value
+        else
+            eval ${1}[iv]=$value$3
+        fi
+   else
+        Hashmap.put $1 $2 $3
+    fi
+}
