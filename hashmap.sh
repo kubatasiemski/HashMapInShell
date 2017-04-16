@@ -223,3 +223,14 @@ Hashmap.add() {
         Hashmap.put $1 $2 $3
     fi
 }
+
+Hashmap.copy() {
+    local array_name=$1
+    local n=$(Hashmap.getMaxSize $1)
+    n=$((n*2+5))
+    local i=0
+    while [ $i -lt $n ] ; do
+        eval ${2}[i]=$(eval echo \${$array_name[i]})
+        ((i++))
+    done
+}
