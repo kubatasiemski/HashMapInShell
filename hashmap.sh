@@ -248,21 +248,29 @@ Hashmap.copy() {
 Hashmap.equals() {
     local array_name=$1
     local array2=$2
-    local n=$(Hashmap.getMaxSize $1)
-    n=$((n*2+5))
-    local i=0
-    while [ $i -lt $n ] ; do
-        local v1=$(eval echo \${$array_name[i]})
-        local v2=$(eval echo \${$array2[i]})
-        if [ "$v1" != "$v2" ] ; then
-            break
-        fi
-        ((i++))
-    done
-    if [ $i -eq $n ] ; then
-        echo 1
-    else
+    local s1=$(Hashmap.size $1)
+    local s2=$(Hashmap.size $2)
+    if [ $s1 -ne $s2 ] ; then
         echo 0
+    else
+        local n=$(Hashmap.getMaxSize $1)
+        local i=0
+        while [ $i -lt $n ] ; do
+            local name=$(eval echo \${$array_name[$((i+5))]})
+            if [[ "$name" != "empty" && "$name" != "" ]] ; then
+                v1=$(Hashmap.get $1 $name)
+                v2=$(Hashmap.get $2 $name)
+                if [[ "$v1" != "$v2" ]] ; then
+                    break
+                fi
+            fi
+            ((i++))
+        done
+        if [ $i -eq $n ] ; then
+            echo 1
+        else
+            echo 0
+        fi
     fi
 }
 

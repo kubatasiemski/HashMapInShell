@@ -59,7 +59,7 @@ Add to value associated with key
 Copy fMAP to tMAP
 
 `Hashmap.copy fMAP tMAP`
-### Hashmap.equals (in progress)
+### Hashmap.equals
 Returns true if the two maps contain the same elements.
 
 `Hashmap.copy fNAME sNAME`
