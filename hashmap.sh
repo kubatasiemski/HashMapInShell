@@ -255,3 +255,39 @@ Hashmap.equals() {
         echo 0
     fi
 }
+
+
+Hashmap.resize() {
+    local array_name=$1
+    local size=$(eval echo \${$array_name[0]})
+    local keys
+    local values
+    local i=0
+    local iK=0
+    local n=0
+    local n=$(Hashmap.getMaxSize $1)
+    local i=0
+    while [ $i -lt $n ] ; do
+        local v1=$(eval echo \${$array_name[i+5]})
+        local v2=$(eval echo \${$array_name[i+n+5]})
+        if [[ "$v1" != "empty" && "$v1" != "" ]] ; then
+            keys[$iK]=$v1
+            values[$iK]=$v2
+            ((iK++))
+        fi
+        ((i++))
+    done
+
+    ((size++))
+    local neWsize=$(Hashmap.primeNumbers $size)
+    Hashmap.clear $1
+    eval ${1}[0]=$size
+    eval ${1}[1]=$neWsize
+    eval ${1}[2]=0
+    eval ${1}[3]=0
+    i=0
+    while [ $i -lt $iK ] ; do
+        Hashmap.put $1 ${keys[$i]} ${values[$i]}
+        ((i++))
+    done
+}
