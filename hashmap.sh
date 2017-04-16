@@ -76,7 +76,7 @@ Hashmap.getI(){
     local hash2=$(Hashmap.secondHash $1 $2)
     local i=$((hash1+5))
     local f=$(eval echo \${$array_name[i]})
-    while [[ $f != "" && $f != $2 ]] ; do
+    while [[ "$f" != "" && "$f" != $2 ]] ; do
         i=$(Hashmap.next $1 $((i-5)) hash2)
         f=$(eval echo \${$array_name[i]})
     done
@@ -165,7 +165,7 @@ Hashmap.toString() {
     local i=0
     while [ $i -lt $n ] ; do
         local name=$(eval echo \${$array_name[$((i+5))]})
-        if [[ $name != "empty" && $name != "" ]] ; then
+        if [[ "$name" != "empty" && "$name" != "" ]] ; then
             local value=$(eval echo \${$array_name[$((i+5+n))]})
             printf "[$name:$value] "
         fi
@@ -182,7 +182,7 @@ Hashmap.keys() {
     local outi=0
     while [ $i -lt $n ] ; do
         local name=$(eval echo \${$array_name[$((i+5))]})
-            if [[ $name != "empty" && $name != "" ]] ; then
+            if [[ "$name" != "empty" && "$name" != "" ]] ; then
                 eval ${2}[outi]=$name
                 ((outi++))
             fi
@@ -198,7 +198,7 @@ Hashmap.values() {
     local outi=0
     while [ $i -lt $n ] ; do
         local name=$(eval echo \${$array_name[$((i+5+n))]})
-        if [[ $name != "empty" && $name != "" ]] ; then
+        if [[ "$name" != "empty" && "$name" != "" ]] ; then
             eval ${2}[outi]=$name
             ((outi++))
         fi
@@ -233,4 +233,25 @@ Hashmap.copy() {
         eval ${2}[i]=$(eval echo \${$array_name[i]})
         ((i++))
     done
+}
+
+Hashmap.equals() {
+    local array_name=$1
+    local array2=$2
+    local n=$(Hashmap.getMaxSize $1)
+    n=$((n*2+5))
+    local i=0
+    while [ $i -lt $n ] ; do
+        local v1=$(eval echo \${$array_name[i]})
+        local v2=$(eval echo \${$array2[i]})
+        if [ "$v1" != "$v2" ] ; then
+            break
+        fi
+        ((i++))
+    done
+    if [ $i -eq $n ] ; then
+        echo 1
+    else
+        echo 0
+    fi
 }
