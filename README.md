@@ -67,7 +67,8 @@ Returns true if the two maps contain the same elements.
 
 ## Examples
 ### In
-```Hashmap.hashmap myMap
+```
+Hashmap.hashmap myMap
 Hashmap.put myMap a 1
 Hashmap.put myMap b 2
 Hashmap.put myMap c 3
